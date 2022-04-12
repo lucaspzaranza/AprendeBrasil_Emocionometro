@@ -1,0 +1,4 @@
+repository "EducaBrasil_Emocionometro@Lucas_Zaranza@cloud"
+  path "/"
+    br "/main"
+    co "/main"
