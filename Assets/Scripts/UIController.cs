@@ -16,7 +16,11 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject screen3;
     [SerializeField] private GameObject screen3PopupPanel;
     [SerializeField] private GameObject screen3AudioAndPlayButtonPanel;
-    private int test = 1;
+
+    [Header("Screen 4")]
+    [SerializeField] private GameObject screen4;
+    [SerializeField] private GameObject screen4ToyMachineButton;
+    [SerializeField] private Animator screen4ToyMachineButtonAnimator;
 
     private void Start()
     {
@@ -30,7 +34,7 @@ public class UIController : MonoBehaviour
 
     public void Screen1AnimateBears()
     {
-        screen1Bears.transform.DOScale(3f, 1f).SetLoops(-1, LoopType.Yoyo);
+        screen1Bears.transform.DOScale(1.5f, 1f).SetLoops(-1, LoopType.Yoyo);
     }
 
     public void Screen2ToggleActivation(bool value)
@@ -47,5 +51,10 @@ public class UIController : MonoBehaviour
     {
         screen3PopupPanel.transform.DOMoveY(0f, duration);
         AudioManager.instance.PlayAudio(0.5f, 1, 1);
+    }
+
+    public void Screen4PressToyMachineButton()
+    {
+        screen4ToyMachineButtonAnimator.SetTrigger("toy_machine_press");
     }
 }
