@@ -8,11 +8,6 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] private AudioSource audioSource;
 
-    [SerializeField] private List<ScreenAudioList> _audioLists;
-    public List<ScreenAudioList> AudioLists => _audioLists;
-
-    public Dictionary<string, List<AudioClip>> AudioDictionary { get; set; } = new Dictionary<string, List<AudioClip>>();
-
     private void Awake()
     {
         if (instance == null)
@@ -21,39 +16,32 @@ public class AudioManager : MonoBehaviour
             Destroy(this.gameObject);
     }
 
-    private void Start()
-    {
-        PopulateAudioDictionary();
-    }
-
-    private void PopulateAudioDictionary()
-    {
-        AudioDictionary = new Dictionary<string, List<AudioClip>>();
-        foreach (var screenAudioList in _audioLists)
-        {
-            AudioDictionary.Add(screenAudioList.name, screenAudioList.audios);
-        }
-    }
-
-    public void PlayAudio(AudioClip audioClip)
-    {
-        audioSource.PlayOneShot(audioClip);
-    }
-
     /// <summary>
     /// Plays an audio with an interval to start.
     /// </summary>
+    /// <param name="audioToPlay">The audio you want to be played.</param>
     /// <param name="timeToStart">Time in seconds to start to play the audio.</param>
-    /// <param name="screenNumber">The number of the audio screen.</param>
-    /// <param name="audioNumber">The number of the audio of the chosen screen.</param>
-    public void PlayAudio(float timeToStart, int screenNumber, int audioNumber)
+    public IEnumerator PlayAudio(AudioClip audioToPlay, float timeToStart)
     {
-        StartCoroutine(PlayAudioCoroutine(timeToStart, screenNumber, audioNumber));
+        audioSource.Stop();
+        yield return new WaitForSeconds(timeToStart);
+        audioSource.clip = audioToPlay;
+        audioSource.Play();
     }
 
-    private IEnumerator PlayAudioCoroutine(float timeToStart, int screenNumber, int audioNumber)
+    public void PlayAudio(AudioClip audioToPlay)
     {
-        yield return new WaitForSeconds(timeToStart);
-        audioSource.PlayOneShot(AudioDictionary[$"Screen {screenNumber}"][audioNumber - 1]);
+        audioSource.Stop();
+        audioSource.clip = audioToPlay;
+        audioSource.Play();
+    }
+
+    public void PlayAudioAndLoop(AudioClip audioToPlay)
+    {
+        if(!audioSource.isPlaying)
+        {
+            audioSource.clip = audioToPlay;
+            audioSource.Play();
+        }
     }
 }
