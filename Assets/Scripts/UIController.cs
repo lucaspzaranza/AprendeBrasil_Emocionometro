@@ -116,10 +116,16 @@ public class UIController : MonoBehaviour
     public void ScaleButton(GameObject gobj)
     {
         touchedButton = gobj;
-        gobj.GetComponent<EventTrigger>().enabled = false;
+
+        var eventTrigger = gobj.GetComponent<EventTrigger>();
+        if(eventTrigger != null)
+            eventTrigger .enabled = false;
+
         Vector2 halfSize = gobj.transform.localScale / 2;
         gobj.transform.DOPunchScale(halfSize, buttonPunchDuration, 5, 0f);
-        Invoke(nameof(ActivateButtonComponent), buttonPunchDuration); 
+
+        if(eventTrigger != null)
+            Invoke(nameof(ActivateButtonComponent), buttonPunchDuration); 
     }
 
     private void ActivateButtonComponent()
